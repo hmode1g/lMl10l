@@ -2,7 +2,7 @@ const mineflayer = require('mineflayer');
 const express = require('express');
 const app = express();
 
-app.get('/', (req, res) => res.send('🌐 البوت شغال 24/7'));
+app.get('/', (req, res) => res.send('🌐 البوت شغال 24/7 هادئ بدون قفز'));
 app.listen(3000, () => console.log('🌐 Web server running on port 3000'));
 
 const botArgs = {
@@ -27,27 +27,21 @@ function createBot() {
         // دخول السيرفايفل بعد 20 ثانية
         setTimeout(() => {
             bot.chat('/survival');
-            console.log('[↕] دخلنا السيرفايفل.. سيتم البقاء لمدة ساعة');
+            console.log('[↕] دخلنا السيرفايفل.. سيتم البقاء بهدوء لمدة ساعة');
         }, 20000);
 
-        // إغلاق الاتصال يدوياً بعد ساعة (3600000 مللي ثانية) لتجديد الاتصال
+        // إغلاق الاتصال يدوياً بعد ساعة لتجديد الاتصال
         setTimeout(() => {
             console.log('🔄 انتهت الساعة، جاري تجديد الاتصال الآن..');
             bot.quit();
         }, 3600000); 
     });
 
-    // القفز AFK لمنع الطرد
-    setInterval(() => {
-        if (bot.entity) {
-            bot.setControlState('jump', true);
-            setTimeout(() => bot.setControlState('jump', false), 1000);
-        }
-    }, 30000);
+    // تم إزالة كود القفز (Jumping) ليكون البوت هادئاً تماماً
+    // سيبقى البوت متصلاً فقط بدون أي حركة مزعجة
 
     bot.on('error', (err) => console.log('خطأ:', err));
     
-    // إعادة الدخول بعد دقيقتين من الخروج
     bot.on('end', () => {
         console.log('🔄 خارج السيرفر الآن.. العودة بعد دقيقتين');
         setTimeout(createBot, 120000);
