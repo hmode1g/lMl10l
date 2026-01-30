@@ -1,87 +1,57 @@
 const mineflayer = require('mineflayer');
 const express = require('express');
-
-/* ====== KEEP ALIVE (Replit) ====== */
 const app = express();
-app.get('/', (req, res) => {
-  res.send('Bot is running!');
-});
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`🌐 Web server running on port ${PORT}`);
-});
+app.get('/', (req, res) => res.send('🌐 البوت شغال 24/7'));
+app.listen(3000, () => console.log('🌐 Web server running on port 3000'));
 
-/* ====== BOT SETTINGS ====== */
-const BOT_CONFIG = {
-  host: 'Goldmc.xyz',
-  port: 1464,
-  username: 'mohammadking78',
-  auth: 'offline',
-  version: false
+const botArgs = {
+    host: 'Goldmc.xyz',
+    port: 25565,
+    username: 'mohammadking78',
+    version: '1.20.1'
 };
 
-let bot;
-let reconnectTimeout = null;
-
-function timeNow() {
-  return new Date().toLocaleString();
-}
-
-/* ====== CREATE BOT ====== */
 function createBot() {
-  bot = mineflayer.createBot(BOT_CONFIG);
+    const bot = mineflayer.createBot(botArgs);
 
-  bot.on('login', () => {
-    console.log(`[✔] دخل البوت السيرفر | ${timeNow()}`);
+    bot.on('login', () => {
+        console.log('[✔] البوت دخل.. جاري تنفيذ الأوامر');
+        
+        // تسجيل الدخول بعد 7 ثوانٍ
+        setTimeout(() => {
+            bot.chat('/login 1234567'); 
+            console.log('[🔑] تم تسجيل الدخول');
+        }, 7000);
 
-    // /login
-    setTimeout(() => {
-      bot.chat('/login 1234567');
-      console.log('[✔] تم إرسال /login');
-    }, 2000);
+        // دخول السيرفايفل بعد 20 ثانية
+        setTimeout(() => {
+            bot.chat('/survival');
+            console.log('[↕] دخلنا السيرفايفل.. سيتم البقاء لمدة ساعة');
+        }, 20000);
 
-    // /survival بعد 10 ثواني
-    setTimeout(() => {
-      bot.chat('/survival');
-      console.log('[✔] تم إرسال /survival');
-    }, 10000);
-  });
+        // إغلاق الاتصال يدوياً بعد ساعة (3600000 مللي ثانية) لتجديد الاتصال
+        setTimeout(() => {
+            console.log('🔄 انتهت الساعة، جاري تجديد الاتصال الآن..');
+            bot.quit();
+        }, 3600000); 
+    });
 
-  // AFK jump كل دقيقة
-  const jumpInterval = setInterval(() => {
-    if (!bot || !bot.entity) return;
-    bot.setControlState('jump', true);
-    setTimeout(() => bot.setControlState('jump', false), 400);
-    console.log('[↕] قفز AFK');
-  }, 60000);
+    // القفز AFK لمنع الطرد
+    setInterval(() => {
+        if (bot.entity) {
+            bot.setControlState('jump', true);
+            setTimeout(() => bot.setControlState('jump', false), 1000);
+        }
+    }, 30000);
 
-  // إذا طلع أو انطرد
-  bot.on('end', (reason) => {
-    console.log(`[✖] البوت طلع من السيرفر (${reason}) | ${timeNow()}`);
-    clearInterval(jumpInterval);
-    reconnect();
-  });
-
-  bot.on('kicked', (reason) => {
-    console.log(`[🚫] البوت انطرد: ${reason} | ${timeNow()}`);
-  });
-
-  bot.on('error', (err) => {
-    console.log('[⚠] خطأ:', err.message);
-  });
+    bot.on('error', (err) => console.log('خطأ:', err));
+    
+    // إعادة الدخول بعد دقيقتين من الخروج
+    bot.on('end', () => {
+        console.log('🔄 خارج السيرفر الآن.. العودة بعد دقيقتين');
+        setTimeout(createBot, 120000);
+    });
 }
 
-/* ====== RECONNECT AFTER 2 MINUTES ====== */
-function reconnect() {
-  if (reconnectTimeout) return;
-
-  console.log('🔁 إعادة الدخول بعد دقيقتين...');
-  reconnectTimeout = setTimeout(() => {
-    reconnectTimeout = null;
-    createBot();
-  }, 120000); // دقيقتين
-}
-
-/* ====== START BOT ====== */
 createBot();
