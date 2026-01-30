@@ -1,4 +1,4 @@
-Telethon==1.25.2
+Telethon
 setuptools
 wheel
 aiohttp
@@ -12,7 +12,7 @@ colour
 cryptg
 csvfaker
 fontTools
-emoji==1.7.0
+emoji
 httpx[http2]
 fonttools
 geopy
@@ -24,7 +24,7 @@ google-auth-oauthlib
 gsearch
 gtts
 hachoir
-heroku3
+heroku
 html-telegraph-poster
 humanize
 jotquote
@@ -51,7 +51,7 @@ pylast
 pymediainfo
 pySmartDL
 python-barcode
-pyTelegramBotAPI==3.7.7
+pyTelegramBotAPI
 pytuneteller
 pytz
 qrcode
@@ -62,7 +62,7 @@ ShazamAPI
 search-engine-parser
 selenium
 spamwatch
-sqlalchemy==1.3.23
+sqlalchemy
 sqlalchemy-json
 telegraph
 tgcrypto
@@ -70,7 +70,7 @@ tswift
 PyMuPDF
 validators
 vcsi
-Wand>=0.6.11
+Wand>
 wikipedia
 ujson
 git+https://github.com/buddhhu/img2html.git
