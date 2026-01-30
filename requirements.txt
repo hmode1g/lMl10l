@@ -1,5 +1,0 @@
-Telethon
-beautifulsoup4
-aiohttp
-pysubs2
-Pillow
