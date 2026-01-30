@@ -1,4 +1,4 @@
-FROM debian:11
+FROM :.python:3.10-slim-bullseye
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get -y install \
     python3 python3-dev python3-dev python3-pip python3-venv 
