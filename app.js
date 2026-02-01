@@ -2,50 +2,50 @@ const mineflayer = require('mineflayer');
 const express = require('express');
 const app = express();
 
-app.get('/', (req, res) => res.send('🌐 البوت شغال 24/7 هادئ بدون قفز'));
+app.get('/', (req, res) => res.send('🌐 3 Bots are Online 24/7'));
 app.listen(3000, () => console.log('🌐 Web server running on port 3000'));
 
-const botArgs = {
-    host: 'Goldmc.xyz',
-    port: 25565,
-    username: 'mohammadking78',
-    version: '1.20.1'
-};
-
-function createBot() {
-    const bot = mineflayer.createBot(botArgs);
-
-    bot.on('login', () => {
-        console.log('[✔] البوت دخل.. جاري تنفيذ الأوامر');
-        
-        // تسجيل الدخول بعد 7 ثوانٍ
-        setTimeout(() => {
-            bot.chat('/login 1234567'); 
-            console.log('[🔑] تم تسجيل الدخول');
-        }, 7000);
-
-        // دخول السيرفايفل بعد 20 ثانية
-        setTimeout(() => {
-            bot.chat('/survival');
-            console.log('[↕] دخلنا السيرفايفل.. سيتم البقاء بهدوء لمدة ساعة');
-        }, 20000);
-
-        // إغلاق الاتصال يدوياً بعد ساعة لتجديد الاتصال
-        setTimeout(() => {
-            console.log('🔄 انتهت الساعة، جاري تجديد الاتصال الآن..');
-            bot.quit();
-        }, 3600000); 
+// دالة إنشاء البوتات
+function createBot(username, password) {
+    const bot = mineflayer.createBot({
+        host: 'Goldmc.xyz',
+        port: 25565,
+        username: username,
+        version: '1.20.1'
     });
 
-    // تم إزالة كود القفز (Jumping) ليكون البوت هادئاً تماماً
-    // سيبقى البوت متصلاً فقط بدون أي حركة مزعجة
+    bot.on('login', () => {
+        console.log(`[✔] البوت ${username} دخل اللوبي`);
+        
+        // 1. تسجيل الدخول بعد 7 ثوانٍ
+        setTimeout(() => {
+            bot.chat(`/login ${password}`); 
+            console.log(`[🔑] ${username}: تم إرسال الباسورد`);
+        }, 7000);
 
-    bot.on('error', (err) => console.log('خطأ:', err));
+        // 2. دخول السيرفايفل بعد 20 ثانية
+        setTimeout(() => {
+            bot.chat('/survival');
+            console.log(`[↕] ${username}: دخل السيرفايفل بنجاح`);
+        }, 20000);
+
+        // 3. البقاء لمدة ساعتين (7,200,000 مللي ثانية) ثم الخروج
+        setTimeout(() => {
+            console.log(`[🔄] انتهت الساعتين لـ ${username}.. جاري الراحة لدقيقة`);
+            bot.quit();
+        }, 7200000); 
+    });
+
+    // في حال حدوث خطأ أو طرد
+    bot.on('error', (err) => console.log(`خطأ في ${username}:`, err));
     
+    // إعادة الدخول بعد دقيقة واحدة (60000 مللي ثانية)
     bot.on('end', () => {
-        console.log('🔄 خارج السيرفر الآن.. العودة بعد دقيقتين');
-        setTimeout(createBot, 120000);
+        setTimeout(() => createBot(username, password), 60000);
     });
 }
 
-createBot();
+// تشغيل الحسابات الثلاثة (تأكد من كتابة الباسورد الصحيح لكل حساب)
+createBot('mohammadking78', '1234567');
+createBot('mohammadking3', '1234567');
+createBot('MR_Dark280', '1234567');
