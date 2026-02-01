@@ -2,47 +2,48 @@ const mineflayer = require('mineflayer');
 const express = require('express');
 const app = express();
 
-app.get('/', (req, res) => res.send('🌐 2 Bots are Online 24/7'));
+app.get('/', (req, res) => res.send('🌐 البوت الأصلي شغال 24/7'));
 app.listen(3000, () => console.log('🌐 Web server running on port 3000'));
 
-function createBot(username, password) {
-    const bot = mineflayer.createBot({
-        host: 'Goldmc.xyz',
-        port: 25565,
-        username: username,
-        version: '1.20.1'
-    });
+const botArgs = {
+    host: 'Goldmc.xyz',
+    port: 25565,
+    username: 'mohammadking78',
+    version: '1.20.1'
+};
+
+function createBot() {
+    const bot = mineflayer.createBot(botArgs);
 
     bot.on('login', () => {
-        console.log(`[✔] البوت ${username} دخل اللوبي`);
+        console.log('[✔] البوت دخل.. جاري تنفيذ الأوامر');
         
         // تسجيل الدخول بعد 7 ثوانٍ
         setTimeout(() => {
-            bot.chat(`/login ${password}`); 
-            console.log(`[🔑] ${username}: تم إرسال الباسورد`);
+            bot.chat('/login 1234567'); 
+            console.log('[🔑] تم تسجيل الدخول');
         }, 7000);
 
         // دخول السيرفايفل بعد 20 ثانية
         setTimeout(() => {
             bot.chat('/survival');
-            console.log(`[↕] ${username}: دخل السيرفايفل`);
+            console.log('[↕] دخلنا السيرفايفل.. سيتم البقاء لمدة ساعة');
         }, 20000);
 
-        // البقاء لمدة ساعتين (7200000ms) ثم الخروج لتجديد الاتصال
+        // إغلاق الاتصال يدوياً بعد ساعة لتجديد الاتصال
         setTimeout(() => {
-            console.log(`[🔄] تجديد اتصال ${username} بعد ساعتين عمل`);
+            console.log('🔄 انتهت الساعة، جاري تجديد الاتصال الآن..');
             bot.quit();
-        }, 7200000); 
+        }, 3600000); 
     });
 
-    bot.on('error', (err) => console.log(`خطأ في ${username}:`, err));
+    bot.on('error', (err) => console.log('خطأ:', err));
     
-    // إعادة الدخول بعد دقيقة واحدة من الخروج
+    // إعادة الدخول بعد دقيقتين من الخروج
     bot.on('end', () => {
-        setTimeout(() => createBot(username, password), 60000);
+        console.log('🔄 خارج السيرفر الآن.. العودة بعد دقيقتين');
+        setTimeout(createBot, 120000);
     });
 }
 
-// تشغيل الحسابين المطلوبين فقط
-createBot('mohammadking78', '1234567');
-createBot('mohammadking3', '1234567');
+createBot();
